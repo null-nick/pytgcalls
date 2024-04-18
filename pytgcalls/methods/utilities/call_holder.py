@@ -23,12 +23,15 @@ class CallHolder(Scaffold):
 
     @property
     async def group_calls(self):
+        calls_dict = await self.calls
         return Dict({
-            chat_id: x for chat_id, x in await self.calls if x.chat_id < 0
+            chat_id: x for chat_id, x in calls_dict.items() if x.chat_id < 0
         })
 
     @property
     async def private_calls(self):
+        calls_dict = await self.calls
         return Dict({
-            chat_id: x for chat_id, x in await self.calls if x.chat_id > 0
+            chat_id: x for chat_id, x in calls_dict.items() if x.chat_id > 0
         })
+
