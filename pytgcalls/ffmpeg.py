@@ -95,7 +95,10 @@ async def check_stream(
         new_w = min(original_width, stream_parameters.width)
         new_h = int(new_w / ratio)
 
-        if new_h > stream_parameters.height:
+        if (
+            new_h > stream_parameters.height and
+            stream_parameters.adjust_by_height
+        ):
             new_h = stream_parameters.height
             new_w = int(new_h * ratio)
 
@@ -282,6 +285,8 @@ def _build_ffmpeg_options(
         options.extend([
             'rawvideo',
             '-r', str(stream_parameters.frame_rate),
+            '-pix_fmt',
+            'yuv420p',
             '-vf',
             f'scale={stream_parameters.width}:{stream_parameters.height}',
         ])

@@ -1,5 +1,4 @@
 from enum import auto
-from enum import Flag
 from pathlib import Path
 from typing import Dict
 from typing import Optional
@@ -17,6 +16,7 @@ from ...media_devices import DeviceInfo
 from ...media_devices import ScreenInfo
 from ...statictypes import statictypes
 from ...ytdlp import YtDlp
+from ..flag import Flag
 from ..raw.audio_parameters import AudioParameters
 from ..raw.audio_stream import AudioStream
 from ..raw.stream import Stream
@@ -32,10 +32,6 @@ class MediaStream(Stream):
         REQUIRED = auto()
         IGNORE = auto()
         NO_LATENCY = auto()
-
-        def __repr__(self):
-            cls_name = self.__class__.__name__
-            return f'{cls_name}.{self.name}'
 
     @statictypes
     def __init__(
@@ -66,7 +62,10 @@ class MediaStream(Stream):
         if isinstance(video_parameters, VideoParameters):
             self._video_parameters = video_parameters
         elif isinstance(video_parameters, VideoQuality):
-            self._video_parameters = VideoParameters(*video_parameters.value)
+            self._video_parameters = VideoParameters(
+                *video_parameters.value,
+                adjust_by_height=False,
+            )
 
         self._media_path: Optional[str] = None
         self._audio_path: Optional[str] = None
