@@ -148,7 +148,9 @@ class BridgedClient(HandlersHolder):
     @staticmethod
     def chat_id(input_peer) -> int:
         class_name = input_peer.__class__.__name__
-        if class_name in ['PeerUser', 'InputPeerUser']:
+        if class_name == 'InputPeerSelf':
+            raise ValueError("InputPeerSelf does not have a chat_id")
+        elif class_name in ['PeerUser', 'InputPeerUser']:
             return input_peer.user_id
         elif class_name in ['Channel', 'ChannelForbidden']:
             return -1000000000000 - input_peer.id
