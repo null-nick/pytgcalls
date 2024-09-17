@@ -391,6 +391,8 @@ class PyrogramClient(BridgedClient):
     ) -> str:
         chat_call = await self._cache.get_full_chat(chat_id)
         if chat_call is not None:
+            if join_as is None:
+                join_as = await self._app.resolve_peer(self._app.me.id)
             result: Updates = await self._app.send(
                 JoinGroupCall(
                     call=chat_call,
